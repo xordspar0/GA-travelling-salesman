@@ -1,0 +1,50 @@
+New York, N.Y.
+Los Angeles, Calif.
+Chicago, Ill.
+Houston, Tex.
+Philadelphia, Pa.
+Phoenix, Ariz.
+San Antonio, Tex.
+San Diego, Calif.
+Dallas, Tex.
+San Jose, Calif.
+Austin, Tex.
+Jacksonville, Fla.
+San Francisco , Calif.
+Indianapolis, Ind.
+Columbus, Ohio
+Fort Worth , Tex.
+Charlotte, N.C.
+Detroit, Mich.
+El Paso, Tex.
+Seattle , Wash.
+Denver , Colo.
+Washington, DC
+Memphis, Tenn.
+Boston, Mass.
+Nashville-Davidson, Tenn.
+Baltimore, Md.
+Oklahoma City, Okla.
+Portland , Ore.
+Las Vegas , Nev.
+Louisville-Jefferson County, Ky.
+Milwaukee, Wis.
+Albuquerque, N.M.
+Tucson, Ariz.
+Fresno, Calif.
+Sacramento, Calif.
+Long Beach, Calif.
+Kansas City, Mo.
+Mesa, Ariz.
+Atlanta , Ga.
+Virginia Beach, Va.
+Omaha , Nebr.
+Colorado Springs, Colo.
+Raleigh, N.C.
+Miami, Fla.
+Oakland, Calif.
+Minneapolis, Minn.
+Tulsa, Okla.
+Cleveland, Ohio
+Wichita, Kans.
+New Orleans, La.
