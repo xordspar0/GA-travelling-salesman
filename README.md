@@ -18,3 +18,5 @@ To do:
 *	For our initial presentation, prepare the network database with the weights
 	between cities.
 	*	Figure out how to use the Google APIs to get that information for us.
+
+Our data is the roadNet-TX.txt dataset from snap.stanford.edu
