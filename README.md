@@ -30,6 +30,11 @@ Open questions:
 To do:
 ------
 
-*	Impliment a randomly generated system to give weights to routes.
+* [x]	Implement a randomly generated system to give weights to routes.
+* [ ]	Implement an algorithm to generete candidate routes.
+	*	Routes that are significantly worse than the average for the previous generation should be killed off before they finish.
+* [ ]	Implement the genetic part of the algorithm: combine and mutate the best routes to make the next generation.
+* [ ]	Parallelize route generation.
+* [ ]	Parallelize combining and splicing.
 
 Our data is the roadNet-TX.txt dataset from snap.stanford.edu
