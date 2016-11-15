@@ -26,6 +26,7 @@ Open questions:
 	routes together at random? Do we swap individual cities?
 	
 *	How should we implement the parallel portion? GPU? Threads? MPI?
+	*	*We're planning to use threads now.*
 
 To do:
 ------
