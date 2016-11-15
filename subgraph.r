@@ -1,7 +1,7 @@
 library(igraph)
 
 dataFile = "net.txt"
-outputFile = "network.txt"
+outputFile = "data/network-medium.txt"
 
 graph = read.graph(dataFile)
 sub = induced_subgraph(graph, c(1:5000))
@@ -10,4 +10,7 @@ largestComponent = which.max(graphComponents$csize)
 largestSubgraphMembers = groups(graphComponents)[largestComponent]
 largestSubgraph = induced_subgraph(sub, unlist(largestSubgraphMembers))
 
-write_graph(largestSubgraph, outputFile)
+subgraph = as_edgelist(largestSubgraph)
+weightedSubgraph = cbind(subgraph, runif(dim(subgraph)[1]))
+
+write.table(weightedSubgraph, outputFile, quote=FALSE, row.names=FALSE, col.names=FALSE)
