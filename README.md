@@ -38,6 +38,7 @@ To do:
 * [ ]	Parallelize route generation.
 * [ ]	Parallelize combining and splicing.
 * [ ]   Write a 5 to 10 page paper describing the project.
+
 		Part One:
 		Describe Genetic Algorithims.
 
