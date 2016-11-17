@@ -39,12 +39,13 @@ To do:
 * [ ]	Parallelize combining and splicing.
 * [ ]   Write a 5 to 10 page paper describing the project.
 
-		Part One:
+	*	Part One:
 		Describe Genetic Algorithims.
 
-		Part Two:
+	*	Part Two:
 		Describe the Traveling Salesman problem.
 
-		Part Three:
+	*	Part Three:
 		Describe project results.
+		
 Our data is the roadNet-TX.txt dataset from snap.stanford.edu
