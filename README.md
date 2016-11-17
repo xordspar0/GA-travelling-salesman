@@ -40,12 +40,15 @@ To do:
 * [ ]   Write a 5 to 10 page paper describing the project.
 
 	*	Part One:
+	
 		Describe Genetic Algorithims.
 
 	*	Part Two:
+
 		Describe the Traveling Salesman problem.
 
 	*	Part Three:
+
 		Describe project results.
 		
 Our data is the roadNet-TX.txt dataset from snap.stanford.edu
