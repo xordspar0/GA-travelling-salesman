@@ -1,2 +1,4 @@
 APIKEY
 *.swp
+*.o
+a.out
