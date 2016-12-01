@@ -55,7 +55,7 @@ int main()
 			}
 			
 			//add route to vector or array of top 
-			selectedRoutes.push_back(make_pair(minVector[j].first, minVector[j].second));
+			selectedRoutes.push_back(make_pair(minVector[0].first, minVector[0].second));
 			
 			//remove route from list of route to be examined
 			tempRoute.erase (tempRoute.begin()+eraseVariable);
