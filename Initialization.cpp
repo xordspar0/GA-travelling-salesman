@@ -33,7 +33,7 @@ Function to generate a new route or finish a preexisting route
 	pR is the partially completed route. Enter an empty Route object if generating a new route
 	cV is the cities visited by the partially completed route, enter an empty vector if generating new route
 */
-Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<double> cV)
+Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<double> nC)
 {
 
 	double currentCity, totalWeight;
@@ -42,7 +42,9 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 
 	vector<double> citiesVisited;
 	vector<double> nList;
-
+	
+	vector<double>::iterator it;
+	
 	Route outputRoute;
 
 	/*
@@ -51,27 +53,50 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	set to the size of that vector, and totalWeight is set
 	to the total weight of that route
 	*/
-	citiesVisited = cV;
+	//citiesVisited.swap(cV);
 	noVisited = citiesVisited.size();
 	totalWeight = pR.weight;
 	nList.swap(pR.nodeList);
 
 	//initial edge randomly selected here
-	currentEdge = rand()%675;
-
-	//first two cities are added to citiesVisited array here
-	citiesVisited.push_back(aWE[currentEdge][0]);
-	citiesVisited.push_back(aWE[currentEdge][1]);
-	nList.push_back(aWE[currentEdge][0]);
-	nList.push_back(aWE[currentEdge][1]);
+	if(citiesVisited.size() == 0)
+	{
+		//currentEdge = rand()%675;
+		currentEdge = 38;
+		//first two cities added to citiesVisited and nList vectors
+		citiesVisited.push_back(aWE[currentEdge][0]);
+		citiesVisited.push_back(aWE[currentEdge][1]);
+		nList.push_back(aWE[currentEdge][0]);
+		nList.push_back(aWE[currentEdge][1]);
+		totalWeight += aWE[currentEdge][2];
+	}
+	//if a partial route is present, the initial edge is found here
+	else
+	{
+		for(int i = 0; i<aWE.size(); i++)
+		{
+			if(aWE[i][0] == nList[nList.size()-2] && aWE[i][1] == nList[nList.size()-1])
+			{
+				//the current edge is the last two elements in the nList vector
+				currentEdge = i;
+			}
+		}
+		for(int i = 0; i<nList.size(); i++)
+		{
+			it = find(citiesVisited.begin(), citiesVisited.end(), nList[i]);
+			if(it == citiesVisited.end())
+			{
+				//cities visited by preexisting route are put into citiesVisited vector
+				citiesVisited.push_back(nList[i]);
+			}
+		}
+	}
+	
+	//current city set
 	currentCity = aWE[currentEdge][1];
-	totalWeight += aWE[currentEdge][2];
-
-	/*
-	the condition for this loop should be (noVisited < n), where n is the number of nodes
-	however, the program constantly hits the totalWeight hard cap when that is the case.
-	*/
-	while(noVisited < 258)
+	
+	
+	while(noVisited < 269)
 	{
 		//if statement imposes a hard weight cap on loop
 		if(totalWeight >= 100000.0)
@@ -130,7 +155,18 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 
 		cout<<"City: "<<currentCity<<" Cities Visited: "<<noVisited<<endl;
 	}
-
+	
+	sort(citiesVisited.begin(),citiesVisited.end());
+	sort(nC.begin(), nC.end());
+	vector<double> diff;
+	set_symmetric_difference(citiesVisited.begin(), citiesVisited.end(), nC.begin(), nC.end(), back_inserter(diff));
+	
+	for(int i = 0; i<diff.size(); i++)
+	{
+		cout<< "Missing: " << diff[i] << endl;
+	}
+	
+	
 	//nodeList and total weight of route are added to the Route object
 	outputRoute.nodeList.swap(nList);
 	outputRoute.weight = totalWeight;
@@ -145,6 +181,8 @@ Route finish()
 {
 	//take an incomplete route and complete it
 }
+
+
 
 
 
@@ -197,7 +235,7 @@ int main()
 	cout << "Total nodes: " << nCount.size() << endl;
 
 	//route object generated here
-	Route r1 = generate(allWeightedEdges, EDGES, NODES);
+	Route r1 = generate(allWeightedEdges, EDGES, NODES, nCount);
 
 	cout<< "Route weight: " << r1.weight << endl;
 
