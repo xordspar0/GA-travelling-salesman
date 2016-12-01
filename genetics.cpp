@@ -1,33 +1,36 @@
 #include <cstdlib>
 #include <vector>
 #include <iostream>
+#include "Route.h"
 
-std::vector<int> crossover(std::vector<int> a, std::vector<int> b) {
-	std::vector<int> child;
+Route crossover(Route a, Route b) {
+	std::vector<int> childNodeList;
 
-	int cross_point_a = std::rand() % a.size();
-	int cross_point_b = std::rand() % b.size();
+	int crossPointA = std::rand() % a.nodeList.size();
+	int crossPointB = std::rand() % b.nodeList.size();
 
-	for (int i = 0; i <= cross_point_a; i++) {
-		child.push_back(a[i]);
+	for (int i = 0; i <= crossPointA; i++) {
+		childNodeList.push_back(a.nodeList[i]);
 	}
-	for (int i = cross_point_b; i < b.size(); i++) {
-		child.push_back(b[i]);
+	for (int i = crossPointB; i < b.size(); i++) {
+		childNodeList.push_back(b.nodeList[i]);
 	}
 
-	// gen_route(child);
+	// Route childRoute = genRoute(child);
 
-	return child;
+	return childRoute;
 }
 
-std:vector<int> mutate(std::vector<int> a) {
-	int cut_point = std::rand() % a.size();
+Route mutate(Route a) {
+	std::vector<int> childNodeList;
+
+	int cut_point = std::rand() % a.nodeList.size();
 
 	for (int i = 0; i <= cross_point_a; i++) {
-		child.push_back(a[i]);
+		childNodeList.push_back(a.nodeList[i]);
 	}
 
-	// gen_route(child);
+	// Route childRoute = genRoute(child);
 
-	return child;
+	return childRoute;
 }
