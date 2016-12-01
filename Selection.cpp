@@ -49,7 +49,7 @@ int main()
 					minVector.clear();
 					minWeight = tempRoute[e].second;
 					minVector.push_back(make_pair(tempRoute[e].first, tempRoute[e].second));
-					eraseValue = e;
+					eraseValue = e - 1;
 				}
 				
 			}
@@ -58,7 +58,7 @@ int main()
 			selectedRoutes.push_back(make_pair(minVector[0].first, minVector[0].second));
 			
 			//remove route from list of route to be examined
-			tempRoute.erase (tempRoute.begin()+eraseVariable);
+			tempRoute.erase (tempRoute.begin() + eraseVariable);
 		
 			//reset minimum
 			minWeight = 0;
@@ -67,10 +67,14 @@ int main()
 		for (int k = 0, k < randomSelection, k++)
 		{
 			//randomly select a number
+			randomSelection = rand() % tempRoute.size();
+			randomValueErase = randomSelection - 1;
 			
-			//
+			//Add random route to selection list
+			selectedRoutes.push_back(make_pair(tempRoute[randomSelection].first, tempRoute[randomSelection].second));
 			
-			
+			//remove random routes
+			tempRoute.erase (tempRoute.begin() + randomValueErase);			
 			
 		}
 }
