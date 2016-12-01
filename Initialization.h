@@ -9,5 +9,5 @@ Function to generate a new route or finish a preexisting route
 	pR is the partially completed route. Enter an empty Route object if generating a new route
 	cV is the cities visited by the partially completed route, enter an empty vector if generating new route
 */
-Route generate(std::vector< std::vector<double> > aWE, int e, int n);
-Route generate(std::vector< std::vector<double> > aWE, int e, int n, Route pR);
+Route generate(std::vector< std::vector<double> > aWE, int e, int n, std::vector<double> nC);
+Route generate(std::vector< std::vector<double> > aWE, int e, int n, Route pR, std::vector<double> nC);

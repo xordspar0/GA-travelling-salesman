@@ -7,23 +7,18 @@
 #include <vector>
 #include <algorithm>
 
+#include "Initialization.h"
 #include "Route.h"
 
 
 using namespace std;
 
-class Route
-{
-	public:
-		vector<double> nodeList;
-		double weight;
-};
 
-Route generate(vector< vector<double> > aWE, int e, int n) {
+Route generate(vector< vector<double> > aWE, int e, int n, vector<double> nC) {
 	vector<double> emptyVector;
 	Route emptyRoute;
 
-	return generate(aWE, e, n, emptyVector, emptyRoute);
+	return generate(aWE, e, n, emptyRoute, nC);
 }
 /*
 Function to generate a new route or finish a preexisting route
