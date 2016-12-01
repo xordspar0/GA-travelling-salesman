@@ -56,8 +56,8 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	//initial edge randomly selected here
 	if(citiesVisited.size() == 0)
 	{
-		//currentEdge = rand()%675;
-		currentEdge = 38;
+		currentEdge = rand()%9824;
+		//currentEdge = 38;
 		//first two cities added to citiesVisited and nList vectors
 		citiesVisited.push_back(aWE[currentEdge][0]);
 		citiesVisited.push_back(aWE[currentEdge][1]);
@@ -91,24 +91,28 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	currentCity = aWE[currentEdge][1];
 	
 	
-	while(noVisited < 269)
+	while(noVisited < 3917)
 	{
 		//if statement imposes a hard weight cap on loop
-		if(totalWeight >= 100000.0)
+		if(totalWeight >= 1000000.0)
 		{
 			break;
 		}
 
 		currentCityEdges = 0;
 		ccIndex = 0;
+		bool indexFound = false;
 
 		//get edges for current city here
 		for(int i = 0; i<aWE.size(); i++)
 		{
 			if(aWE[i][0] == currentCity)
 			{
-				if(ccIndex != (i-1))
+				if(indexFound == false)
+				{
 					ccIndex = i;
+					indexFound = true;
+				}
 				currentCityEdges++;
 			}
 		}
@@ -186,14 +190,14 @@ int main()
 	//generate random seed
 	srand(time(0));
 
-	//constant for # of edges in file
-	const int EDGES = 676;
-	//constant for # of nodes in file
-	const int NODES = 269;
+	//constant for # of edges in file (676 in small)(9824 in large)
+	const int EDGES = 9824;
+	//constant for # of nodes in file (269 in small)(3917 in large)
+	const int NODES = 3917;
 
 	//open file
 	fstream inputFile;
-	inputFile.open ("network-small.txt", std::ios::in);
+	inputFile.open ("network-medium.txt", std::ios::in);
 
 	/*
 	variables u, v, and w used for file input
