@@ -6,12 +6,18 @@
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 int main()
 {
+	//variable to erase element
+	int eraseVariable;
+	
 	//vector of routes
-	std::vector<pair<double, double>> tempRoute;
-	std::vector<pair<double, double>> selectedRoutes;
-	std::vector<pair<double, double>> minVector;
+	vector<pair<double, double>> tempRoute;
+	vector<pair<double, double>> selectedRoutes;
+	vector<pair<double, double>> minVector;
+	vector<double> removedList;
 	
 	//minimum variable
 	double minWeight = 0;
@@ -33,21 +39,26 @@ int main()
 	for (int j = 0, j < topSelection, j++)
 		{
 			//sort through to find best scores
-			for (int e = 0, e < GEN_SIZE, e++)
+			for (int e = 0, e < tempRoute.size(), e++)
 			{
+
 				//find best scores (smallest weights)
-				if (minWeight == 0 || minweight > tempRoute[j].second)
+				if (minWeight == 0 || minweight > tempRoute[e].second)
 				{				
+					//if new minimum is found clear list and set values
 					minVector.clear();
-					minWeight = tempRoute[j].second;
-					minVector.push_back(make_pair(tempRoute[j].first, tempRoute[j].second));
+					minWeight = tempRoute[e].second;
+					minVector.push_back(make_pair(tempRoute[e].first, tempRoute[e].second));
+					eraseValue = e;
 				}
+				
 			}
+			
 			//add route to vector or array of top 
 			selectedRoutes.push_back(make_pair(minVector[j].first, minVector[j].second));
 			
 			//remove route from list of route to be examined
-		
+			tempRoute.erase (tempRoute.begin()+eraseVariable);
 		
 			//reset minimum
 			minWeight = 0;
