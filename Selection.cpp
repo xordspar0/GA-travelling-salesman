@@ -13,7 +13,7 @@ int main()
 {
 	//variable to erase element
 	int eraseVariable;
-	int randomSelection;
+	int randomValueErase;
 	
 	//vector of routes
 	vector<pair<double, double>> tempRoute;
@@ -70,11 +70,11 @@ int main()
 		for (int k = 0, k < randomSelection, k++)
 		{
 			//randomly select a number
-			randomSelection = rand() % tempRoute.size();
-			randomValueErase = randomSelection - 1;
+			int randomValueSelection = rand() % tempRoute.size();
+			randomValueErase = randomValueSelection - 1;
 			
 			//Add random route to selection list
-			selectedRoutes.push_back(make_pair(tempRoute[randomSelection].first, tempRoute[randomSelection].second));
+			selectedRoutes.push_back(make_pair(tempRoute[randomValueSelection].first, tempRoute[randomValueSelection].second));
 			
 			//remove random routes
 			tempRoute.erase (tempRoute.begin() + randomValueErase);			
