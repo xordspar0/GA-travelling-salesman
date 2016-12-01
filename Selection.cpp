@@ -13,6 +13,7 @@ int main()
 {
 	//variable to erase element
 	int eraseVariable;
+	int randomSelection;
 	
 	//vector of routes
 	vector<pair<double, double>> tempRoute;
@@ -39,6 +40,7 @@ int main()
 	//grab 20% of routes
 	for (int j = 0, j < topSelection, j++)
 		{
+			
 			//sort through to find best scores
 			for (int e = 0, e < tempRoute.size(), e++)
 			{
