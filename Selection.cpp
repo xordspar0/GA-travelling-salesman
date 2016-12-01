@@ -53,7 +53,7 @@ int main()
 				minVector.clear();
 				minWeight = tempRoute[e].second;
 				minVector.push_back(make_pair(tempRoute[e].first, tempRoute[e].second));
-				eraseValue = e - 1;
+				eraseValue = e;
 			}
 			
 		}
@@ -72,7 +72,7 @@ int main()
 		{
 			//randomly select a number
 			int randomValueSelection = rand() % tempRoute.size();
-			randomValueErase = randomValueSelection - 1;
+			randomValueErase = randomValueSelection;
 		
 			//Add random route to selection list
 			selectedRoutes.push_back(make_pair(tempRoute[randomValueSelection].first, tempRoute[randomValueSelection].second));
