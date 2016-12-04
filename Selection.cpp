@@ -1,84 +1,70 @@
-// Franklin Slaby
-
-//Fitness Determination (Selection)
-
 #include <stdio.h>
-#include <iostream>
-#include <vector>
 #include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <ctime>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+
+#include "Route.h"
 
 using namespace std;
 
+bool compareRoutes(Route a, Route b)
+{
+	return (a.weight<b.weight);
+}
+
+vector<Route> testFitness(vector<Route> routeList)
+{
+	
+	const double GEN_SIZE = routeList.size();
+	
+	int topSelection = (int)(GEN_SIZE/5);
+	int randomSelection = (int)(GEN_SIZE/20);
+	
+	vector<Route> fitVector;
+	
+	sort(routeList.begin(), routeList.end(), compareRoutes);
+	
+	for(int i = 0; i < topSelection; i++)
+	{
+		fitVector.push_back(routeList[i]);
+	}
+	
+	for(int i = 0; i < randomSelection; i++)
+	{
+		fitVector.push_back(routeList[fmod(rand(), routeList.size())]);
+	}
+	
+	return fitVector;
+	
+}
+
 int main()
 {
-	//variable to erase element
-	int eraseVariable;
-	int randomValueErase;
 	
-	//vector of routes
-	vector<pair<double, double>> tempRoute;
-	vector<pair<double, double>> selectedRoutes;
-	vector<pair<double, double>> minVector;
-	vector<double> removedList;
+	srand(time(0));
 	
-	//minimum variable
-	double minWeight = 0;
-		
-	//calculate 20% of the vector
-	int topSelection = GEN_SIZE/5;
-
-	// calculate 5% of the vector	
-	int randomSelection = GEN_SIZE/20;
-
-	//Look at a route
-	for (int i = 0, i < GEN_SIZE, i++)
+	vector<Route> testVector;
+	vector<Route> fitVector;
+	Route temp;
+	
+	for(int i = 0; i < 50; i++)
 	{
-		//add route to temporary list
-		tempRoute.push_back(make_pair(routes[i].cityList, routes[i].weight));
-		
+		temp.weight = fmod(rand(), 100.0);
+		testVector.push_back(temp);
+		cout<< temp.weight<<endl;
 	}
 	
-	//grab 20% of routes
-	for (int j = 0, j < topSelection, j++)
-	{
-		
-		//sort through to find best scores
-		for (int e = 0, e < tempRoute.size(), e++)
-		{
-			
-			//find best scores (smallest weights)
-			if (minWeight == 0 || minweight > tempRoute[e].second)
-			{				
-				//if new minimum is found clear list and set values
-				minVector.clear();
-				minWeight = tempRoute[e].second;
-				minVector.push_back(make_pair(tempRoute[e].first, tempRoute[e].second));
-				eraseValue = e;
-			}
-			
-		}
-			
-		//add route to vector or array of top 
-		selectedRoutes.push_back(make_pair(minVector[0].first, minVector[0].second));
-		
-		//remove route from list of route to be examined
-		tempRoute.erase (tempRoute.begin() + eraseVariable);
+	fitVector = testFitness(testVector);
 	
-		//reset minimum
-		minWeight = 0;
+	for(int i = 0; i < fitVector.size(); i++)
+	{
+		cout << "Vector # " << i << " Weight: " << fitVector[i].weight << endl;
 	}
 	
-		for (int k = 0, k < randomSelection, k++)
-		{
-			//randomly select a number
-			int randomValueSelection = rand() % tempRoute.size();
-			randomValueErase = randomValueSelection;
-		
-			//Add random route to selection list
-			selectedRoutes.push_back(make_pair(tempRoute[randomValueSelection].first, tempRoute[randomValueSelection].second));
-		
-			//remove random routes
-			tempRoute.erase (tempRoute.begin() + randomValueErase);			
-		
-		}
+	return 0;
+	
 }
