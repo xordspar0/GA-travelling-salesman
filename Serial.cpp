@@ -50,12 +50,12 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	to the total weight of that route
 	*/
 	//citiesVisited.swap(cV);
-	noVisited = citiesVisited.size();
+	
 	totalWeight = pR.weight;
 	nList.swap(pR.nodeList);
 
 	//initial edge randomly selected here
-	if(citiesVisited.size() == 0)
+	if(nList.size() == 0)
 	{
 		currentEdge = rand()%676;
 		//currentEdge = 38;
@@ -88,6 +88,8 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 		}
 	}
 
+	noVisited = citiesVisited.size();
+	
 	//current city set
 	currentCity = aWE[currentEdge][1];
 
