@@ -50,7 +50,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	to the total weight of that route
 	*/
 	//citiesVisited.swap(cV);
-	
+
 	//totalWeight = pR.weight;
 	nList.swap(pR.nodeList);
 
@@ -85,7 +85,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 				}
 			}
 		}
-		
+
 		for(int i = 0; i<nList.size(); i++)
 		{
 			it = find(citiesVisited.begin(), citiesVisited.end(), nList[i]);
@@ -98,7 +98,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	}
 
 	noVisited = citiesVisited.size();
-	
+
 	//current city set
 	currentCity = aWE[currentEdge][1];
 
@@ -203,9 +203,9 @@ bool compareRoutes(Route a, Route b)
 
 vector<Route> testFitness(vector<Route> routeList)
 {
-	
+
 	//const double GEN_SIZE = routeList.size();
-	
+
 	int topSelection = (int)(GEN_SIZE/5);
 	int randomSelection = (int)(GEN_SIZE/20);
 
@@ -272,10 +272,13 @@ Route mutate(std::vector< std::vector<double> > aWE, int e, int n, Route a, vect
 	return childRoute;
 }
 
-
-
-
-
+double fitnessMean(vector<Route> routes) {
+	double sum = 0;
+	for (int i = 0; i < routes.size(); i++) {
+		sum += routes[i].weight;
+	}
+	return sum / routes.size();
+}
 
 int main()
 {
@@ -289,7 +292,7 @@ int main()
 
 	//open file
 	fstream inputFile;
-	inputFile.open ("network-small.txt", std::ios::in);
+	inputFile.open ("data/network-small.txt", std::ios::in);
 
 	/*
 	variables u, v, and w used for file input
@@ -329,9 +332,9 @@ int main()
 	//Route r1 = generate(allWeightedEdges, EDGES, NODES, nCount);
 
 	//cout<< "Route weight: " << r1.weight << endl;
-	
+
 	vector<Route> routeVector;
-	
+
 	for(int i = 0; i<GEN_SIZE ; i++)
 	{
 		routeVector.push_back(generate(allWeightedEdges, EDGES, NODES, nCount));
@@ -339,7 +342,9 @@ int main()
 
 	vector<Route> fitVector;
 	fitVector = testFitness(routeVector);
-	
+	double mean;
+	double stdev;
+
 	for(int i = 0; i<GEN_NO; i++)
 	{
 		routeVector.clear();
@@ -353,21 +358,23 @@ int main()
 			else
 			{
 				routeVector.push_back
-					(crossover(allWeightedEdges, EDGES, NODES, 
+					(crossover(allWeightedEdges, EDGES, NODES,
 					fitVector[fmod(rand(), fitVector.size())], fitVector[fmod(rand(), fitVector.size())], nCount));
 			}
 		}
-		
-		fitVector = testFitness(routeVector);
-		
+
 		cout << "Generation #" << i << endl;
+		cout << "Mean: " << fitnessMean(routeVector) << endl;
+		//cout << "Standard deviation: " << fitnessStdev(routeVector) << endl;
+		cout << "Selected parents:" << endl;
+		fitVector = testFitness(routeVector);
 		for(int i = 0; i < fitVector.size(); i++)
 		{
-			cout << "Vector # " << i << " Weight: " << fitVector[i].weight << endl;
+			cout << "\tVector # " << i << " Weight: " << fitVector[i].weight << endl;
 		}
-		
+
 	}
-	
+
 	cout << endl;
 	//cout << "BEST ROUTE WEIGHT: " << fitVector[0] << endl;
 
