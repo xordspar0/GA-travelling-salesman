@@ -38,9 +38,9 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 
 	vector<double> citiesVisited;
 	vector<double> nList;
-	
+
 	vector<double>::iterator it;
-	
+
 	Route outputRoute;
 
 	/*
@@ -87,11 +87,11 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 			}
 		}
 	}
-	
+
 	//current city set
 	currentCity = aWE[currentEdge][1];
-	
-	
+
+
 	while(noVisited < n)
 	{
 		//if statement imposes a hard weight cap on loop
@@ -155,18 +155,18 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 
 		//cout<<"City: "<<currentCity<<" Cities Visited: "<<noVisited<<endl;
 	}
-	
+
 	sort(citiesVisited.begin(),citiesVisited.end());
 	sort(nC.begin(), nC.end());
 	vector<double> diff;
 	set_symmetric_difference(citiesVisited.begin(), citiesVisited.end(), nC.begin(), nC.end(), back_inserter(diff));
-	
+
 	for(int i = 0; i<diff.size(); i++)
 	{
 		cout<< "Missing: " << diff[i] << endl;
 	}
-	
-	
+
+
 	//nodeList and total weight of route are added to the Route object
 	outputRoute.nodeList.swap(nList);
 	outputRoute.weight = totalWeight;
@@ -197,23 +197,26 @@ vector<Route> testFitness(vector<Route> routeList)
 	
 	int topSelection = (int)(GEN_SIZE/5);
 	int randomSelection = (int)(GEN_SIZE/20);
-	
+
 	vector<Route> fitVector;
-	
+
 	sort(routeList.begin(), routeList.end(), compareRoutes);
-	
+
 	for(int i = 0; i < topSelection; i++)
 	{
-		fitVector.push_back(routeList[i]);
+		fitVector.push_back(routeList[0]);
+		routeList.erase(routeList.begin());
 	}
-	
+
 	for(int i = 0; i < randomSelection; i++)
 	{
-		fitVector.push_back(routeList[fmod(rand(), routeList.size())]);
+		int selection = fmod(rand(), routeList.size());
+		fitVector.push_back(routeList[selection]);
+		routeList.erase(routeList.begin() + selection); // Prevent a route from being selected more than once.
 	}
-	
+
 	return fitVector;
-	
+
 }
 
 
@@ -272,11 +275,10 @@ int main()
 	const int EDGES = 676;
 	//constant for # of nodes in file (269 in small)(3917 in large)
 	const int NODES = 269;
-	
 
 	//open file
 	fstream inputFile;
-	inputFile.open ("network-small.txt", std::ios::in);
+	inputFile.open ("data/network-small.txt", std::ios::in);
 
 	/*
 	variables u, v, and w used for file input
@@ -323,7 +325,7 @@ int main()
 	{
 		routeVector.push_back(generate(allWeightedEdges, EDGES, NODES, nCount));
 	}
-	
+
 	vector<Route> fitVector;
 	fitVector = testFitness(routeVector);
 	
