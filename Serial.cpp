@@ -51,7 +51,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	*/
 	//citiesVisited.swap(cV);
 	
-	totalWeight = pR.weight;
+	//totalWeight = pR.weight;
 	nList.swap(pR.nodeList);
 
 	//initial edge randomly selected here
@@ -69,14 +69,23 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	//if a partial route is present, the initial edge is found here
 	else
 	{
-		for(int i = 0; i<aWE.size(); i++)
+		for(int i = 0; i < nList.size(); i++)
 		{
-			if(aWE[i][0] == nList[nList.size()-2] && aWE[i][1] == nList[nList.size()-1])
+			for(int j = 0; j<aWE.size(); j++)
 			{
-				//the current edge is the last two elements in the nList vector
-				currentEdge = i;
+				if(aWE[j][0] == nList[nList.size()-2] && aWE[j][1] == nList[nList.size()-1])
+				{
+					//the current edge is the last two elements in the nList vector
+					currentEdge = j;
+					totalWeight += aWE[j][2];
+				}
+				else if(aWE[j][0] == nList[i] && aWE[j][1] == nList[i+1])
+				{
+					totalWeight += aWE[j][2];
+				}
 			}
 		}
+		
 		for(int i = 0; i<nList.size(); i++)
 		{
 			it = find(citiesVisited.begin(), citiesVisited.end(), nList[i]);
@@ -280,7 +289,7 @@ int main()
 
 	//open file
 	fstream inputFile;
-	inputFile.open ("data/network-small.txt", std::ios::in);
+	inputFile.open ("network-small.txt", std::ios::in);
 
 	/*
 	variables u, v, and w used for file input
@@ -338,7 +347,8 @@ int main()
 		{
 			if(rand()%MUTATION_FRACTION == 1)
 			{
-				routeVector.push_back(mutate(allWeightedEdges, EDGES, NODES, fitVector[fmod(rand(), fitVector.size())], nCount));
+				routeVector.push_back
+					(mutate(allWeightedEdges, EDGES, NODES, fitVector[fmod(rand(), fitVector.size())], nCount));
 			}
 			else
 			{
