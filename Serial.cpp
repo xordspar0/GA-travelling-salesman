@@ -9,6 +9,7 @@
 
 #include "Initialization.h"
 #include "Route.h"
+#include "config.h"
 
 
 using namespace std;
@@ -56,7 +57,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	//initial edge randomly selected here
 	if(citiesVisited.size() == 0)
 	{
-		currentEdge = rand()%9824;
+		currentEdge = rand()%676;
 		//currentEdge = 38;
 		//first two cities added to citiesVisited and nList vectors
 		citiesVisited.push_back(aWE[currentEdge][0]);
@@ -170,7 +171,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	outputRoute.nodeList.swap(nList);
 	outputRoute.weight = totalWeight;
 
-	cout<<"Route complete"<<endl;
+	//cout<<"Route complete"<<endl;
 	return outputRoute;
 
 }
@@ -192,7 +193,7 @@ bool compareRoutes(Route a, Route b)
 vector<Route> testFitness(vector<Route> routeList)
 {
 	
-	const double GEN_SIZE = routeList.size();
+	//const double GEN_SIZE = routeList.size();
 	
 	int topSelection = (int)(GEN_SIZE/5);
 	int randomSelection = (int)(GEN_SIZE/20);
@@ -221,6 +222,46 @@ vector<Route> testFitness(vector<Route> routeList)
 
 
 
+Route crossover(std::vector< std::vector<double> > aWE, int e, int n, Route a, Route b, vector<double> nC) {
+	std::vector<double> childNodeList;
+
+	int crossPointA = std::rand() % a.nodeList.size();
+	int crossPointB = std::rand() % b.nodeList.size();
+
+	for (int i = 0; i <= crossPointA; i++) {
+		childNodeList.push_back(a.nodeList[i]);
+	}
+	for (uint i = crossPointB; i < b.nodeList.size(); i++) {
+		childNodeList.push_back(b.nodeList[i]);
+	}
+
+	Route childRoute;
+	childRoute.nodeList = childNodeList;
+	childRoute = generate(aWE, e, n, childRoute, nC);
+
+	return childRoute;
+}
+
+Route mutate(std::vector< std::vector<double> > aWE, int e, int n, Route a, vector<double> nC) {
+	std::vector<double> childNodeList;
+
+	int cutPoint = std::rand() % a.nodeList.size();
+
+	for (int i = 0; i <= cutPoint; i++) {
+		childNodeList.push_back(a.nodeList[i]);
+	}
+
+	Route childRoute;
+	childRoute.nodeList = childNodeList;
+	childRoute = generate(aWE, e, n, childRoute, nC);
+
+	return childRoute;
+}
+
+
+
+
+
 
 int main()
 {
@@ -228,13 +269,14 @@ int main()
 	srand(time(0));
 
 	//constant for # of edges in file (676 in small)(9824 in large)
-	const int EDGES = 9824;
+	const int EDGES = 676;
 	//constant for # of nodes in file (269 in small)(3917 in large)
-	const int NODES = 3917;
+	const int NODES = 269;
+	
 
 	//open file
 	fstream inputFile;
-	inputFile.open ("network-medium.txt", std::ios::in);
+	inputFile.open ("network-small.txt", std::ios::in);
 
 	/*
 	variables u, v, and w used for file input
@@ -275,20 +317,45 @@ int main()
 
 	//cout<< "Route weight: " << r1.weight << endl;
 	
-	vector<Route> rList;
+	vector<Route> routeVector;
 	
-	for(int i = 0; i<50 ; i++)
+	for(int i = 0; i<GEN_SIZE ; i++)
 	{
-		rList.push_back(generate(allWeightedEdges, EDGES, NODES, nCount));
+		routeVector.push_back(generate(allWeightedEdges, EDGES, NODES, nCount));
 	}
 	
 	vector<Route> fitVector;
-	fitVector = testFitness(rList);
+	fitVector = testFitness(routeVector);
 	
-	for(int i = 0; i < fitVector.size(); i++)
+	for(int i = 0; i<GEN_NO; i++)
 	{
-		cout << "Vector # " << i << " Weight: " << fitVector[i].weight << endl;
+		routeVector.clear();
+		for(int j = 0; j < GEN_SIZE; j++)
+		{
+			if(rand()%MUTATION_FRACTION == 1)
+			{
+				routeVector.push_back(mutate(allWeightedEdges, EDGES, NODES, fitVector[fmod(rand(), fitVector.size())], nCount));
+			}
+			else
+			{
+				routeVector.push_back
+					(crossover(allWeightedEdges, EDGES, NODES, 
+					fitVector[fmod(rand(), fitVector.size())], fitVector[fmod(rand(), fitVector.size())], nCount));
+			}
+		}
+		
+		fitVector = testFitness(routeVector);
+		
+		cout << "Generation #" << i << endl;
+		for(int i = 0; i < fitVector.size(); i++)
+		{
+			cout << "Vector # " << i << " Weight: " << fitVector[i].weight << endl;
+		}
+		
 	}
+	
+	cout << endl;
+	//cout << "BEST ROUTE WEIGHT: " << fitVector[0] << endl;
 
 	return 0;
 }
