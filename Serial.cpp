@@ -14,6 +14,47 @@
 
 using namespace std;
 
+vector<Route> routeVector;
+int generated;
+
+pthread_mutex_t routevectormutex;
+pthread_mutex_t generatedmutex;
+
+struct arg_struct
+{
+	vector< vector<double> > aWE;
+	int e;
+	int n;
+	vector<Route> fV;
+	vector<double> nC;
+}
+
+void threadFunc(void *arguments)
+{
+	struct arg_struct *args = arguments;
+	pthread_mutex_lock(&generatedmutex);
+	generated++;
+	pthread_mutex_unlock(&generatedmutex);
+	
+	Route temp;
+	
+	if(rand()%MUTATION_FRACTION == 1)
+	{
+		temp =
+			(mutate(args -> aWE, args -> e, args -> n, args -> fV[fmod(rand(), args -> fV.size())], args -> nC));
+	}
+	else
+	{
+		temp = 
+			(crossover(args -> aWE, args -> e, args -> n,
+			args -> fV[fmod(rand(), args -> fV.size())], args -> fV[fmod(rand(), args -> fV.size())], args -> nC));
+	}
+	
+	pthread_mutex_lock(&routevectormutex);
+	routeVector.push_back(temp);
+	pthread_mutex_unlock(&routevectormutex);
+}
+
 
 Route generate(vector< vector<double> > aWE, int e, int n, vector<double> nC) {
 	vector<double> emptyVector;
@@ -54,7 +95,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	//totalWeight = pR.weight;
 	nList.swap(pR.nodeList);
 
-	//initial edge randomly selected here
+	//initial edge randomly selected here..
 	if(nList.size() == 0)
 	{
 		currentEdge = rand()%676;
@@ -284,7 +325,13 @@ int main()
 {
 	//generate random seed
 	srand(time(0));
+	
+	//pthread_mutex_t routevectormutex;
+	//pthread_mutex_t generatedmutex;
 
+	pthread_mutex_init(&routevectormutex, NULL);
+	pthread_mutex_init(&generatedmutex, NULL);
+	
 	//constant for # of edges in file (676 in small)(9824 in large)
 	const int EDGES = 676;
 	//constant for # of nodes in file (269 in small)(3917 in large)
@@ -328,13 +375,6 @@ int main()
 
 	cout << "Total nodes: " << nCount.size() << endl;
 
-	//route object generated here
-	//Route r1 = generate(allWeightedEdges, EDGES, NODES, nCount);
-
-	//cout<< "Route weight: " << r1.weight << endl;
-
-	vector<Route> routeVector;
-
 	for(int i = 0; i<GEN_SIZE ; i++)
 	{
 		routeVector.push_back(generate(allWeightedEdges, EDGES, NODES, nCount));
@@ -345,24 +385,27 @@ int main()
 	double mean;
 	double stdev;
 
+	pthread_t workerThreads[NUMTHREADS];
+	
+	arg_struct args;
+	
 	for(int i = 0; i<GEN_NO; i++)
 	{
 		routeVector.clear();
+		args.aWE = allWeightedEdges;
+		args.e = EDGES;
+		args.n = NODES;
+		args.fV = fitVector;
+		args.nC = nCount;
 		for(int j = 0; j < GEN_SIZE; j++)
 		{
-			if(rand()%MUTATION_FRACTION == 1)
-			{
-				routeVector.push_back
-					(mutate(allWeightedEdges, EDGES, NODES, fitVector[fmod(rand(), fitVector.size())], nCount));
-			}
-			else
-			{
-				routeVector.push_back
-					(crossover(allWeightedEdges, EDGES, NODES,
-					fitVector[fmod(rand(), fitVector.size())], fitVector[fmod(rand(), fitVector.size())], nCount));
-			}
+			pthread_create(&workerThreads[i], NULL, &threadFunc, (void *)&args);
 		}
 
+		for(int j = 0; j < GEN_SIZE; j++)
+		{
+			pthread_join(workerThreads[i], NULL);
+		}
 		cout << "Generation #" << i << endl;
 		cout << "Mean: " << fitnessMean(routeVector) << endl;
 		//cout << "Standard deviation: " << fitnessStdev(routeVector) << endl;
@@ -376,7 +419,6 @@ int main()
 	}
 
 	cout << endl;
-	//cout << "BEST ROUTE WEIGHT: " << fitVector[0] << endl;
 
 	return 0;
 }
