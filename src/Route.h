@@ -6,7 +6,7 @@
 class Route {
 	public:
 		std::vector<double> nodeList;
-		double weight;
+		double fitness;
 };
 
 #endif
