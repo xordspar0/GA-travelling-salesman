@@ -51,18 +51,15 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	//if a partial route is present, the initial edge is found here
 	else
 	{
-		for(int i = 0; i < nList.size(); i++)
+		for(int i = 0; i < nList.size() - 1; i++)
 		{
+			
 			for(int j = 0; j<aWE.size(); j++)
 			{
-				if(aWE[j][0] == nList[nList.size()-2] && aWE[j][1] == nList[nList.size()-1])
+				
+				if(aWE[j][0] == nList[i] && aWE[j][1] == nList[i+1])
 				{
-					//the current edge is the last two elements in the nList vector
 					currentEdge = j;
-					totalWeight += aWE[j][2];
-				}
-				else if(aWE[j][0] == nList[i] && aWE[j][1] == nList[i+1])
-				{
 					totalWeight += aWE[j][2];
 				}
 			}
