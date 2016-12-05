@@ -124,7 +124,7 @@ int main()
 			workerThreads[j].join();
 		}
 		cout << "Generation #" << i << endl;
-		cout << "Mean: " << fitnessMean(routeVector) << endl;
+		cout << "Median: " << fitnessMedian(routeVector) << endl;
 		cout << "Standard deviation: " << fitnessStddev(routeVector) << endl;
 		cout << "Selected parents:" << endl;
 		fitVector = selectBestRoutes(routeVector);

@@ -1,7 +1,9 @@
 #include <cmath>
 
+#include <algorithm>
 #include <vector>
 
+#include "select.h"
 #include "Route.h"
 
 using namespace std;
@@ -12,6 +14,12 @@ double fitnessMean(vector<Route> routes) {
 		sum += routes[i].fitness;
 	}
 	return sum / routes.size();
+}
+
+double fitnessMedian(vector<Route> routes) {
+	sort(routes.begin(), routes.end(), compareRoutes);
+	int medianIndex = (int)(routes.size()/2);
+	return(routes[medianIndex].fitness);
 }
 
 double fitnessStddev(vector<Route> routes) {
