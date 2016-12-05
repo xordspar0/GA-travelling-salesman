@@ -29,7 +29,12 @@ To Do
 * [x]	Implement the genetic part of the algorithm: combine and mutate the best routes to make the next generation.
 * [x]	Parallelize route generation.
 * [x]	Parallelize combining and splicing.
-* [ ]	Improve the performance.
+* [ ]	Improve the performance of the parallel implementation.
+	*	Instead of using a global counter to decide when to stop generating
+		routes, maybe allocate a certain number of routes to each thread at the
+		beginning.
+	*	Try having each thread keep a local route vector and combining them all
+		once at the end.
 * [ ]   Write a 5 to 10 page paper describing the project.
 	*	Part One: Describe Genetic Algorithims.
 	*	Part Two: Describe the Traveling Salesman problem.
