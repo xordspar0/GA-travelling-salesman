@@ -14,13 +14,6 @@
 
 using namespace std;
 
-
-Route generate(vector< vector<double> > aWE, int e, int n, vector<double> nC) {
-	vector<double> emptyVector;
-	Route emptyRoute;
-
-	return generate(aWE, e, n, emptyRoute, nC);
-}
 /*
 Function to generate a new route or finish a preexisting route
 	aWE is the vector containing all of the edges and weights from the file
@@ -187,10 +180,12 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 
 }
 
+Route generate(vector< vector<double> > aWE, int e, int n, vector<double> nC) {
+	vector<double> emptyVector;
+	Route emptyRoute;
 
-
-
-
+	return generate(aWE, e, n, emptyRoute, nC);
+}
 
 /*
 Function to test the fitness of a vector of routes and return a vector
