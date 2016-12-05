@@ -1,9 +1,9 @@
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
 #include <stdio.h>
-#include <stdlib.h>
 #include <fstream>
 #include <iostream>
-#include <ctime>
-#include <math.h>
 #include <vector>
 #include <algorithm>
 
@@ -321,6 +321,17 @@ double fitnessMean(vector<Route> routes) {
 	return sum / routes.size();
 }
 
+double fitnessStddev(vector<Route> routes) {
+	double deviationSum = 0;
+	double mean = fitnessMean(routes);
+
+	for (int i = 0; i < routes.size(); i++) {
+		deviationSum += pow(routes[i].weight - mean, 2);
+	}
+	double variance = deviationSum / routes.size();
+	return sqrt(variance);
+}
+
 int main()
 {
 	//generate random seed
@@ -408,7 +419,7 @@ int main()
 		}
 		cout << "Generation #" << i << endl;
 		cout << "Mean: " << fitnessMean(routeVector) << endl;
-		//cout << "Standard deviation: " << fitnessStdev(routeVector) << endl;
+		cout << "Standard deviation: " << fitnessStddev(routeVector) << endl;
 		cout << "Selected parents:" << endl;
 		fitVector = testFitness(routeVector);
 		for(int i = 0; i < fitVector.size(); i++)
