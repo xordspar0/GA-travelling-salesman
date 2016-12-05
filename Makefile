@@ -9,7 +9,7 @@ ga-serial: serial.o $(OBJS)
 	$(CC) -o $@ $(CFLAGS) $^
 
 ga-parallel: parallel.o $(OBJS)
-	$(CC) -o $@ $(CFLAGS) -lpthread $^
+	$(CC) -o $@ $(CFLAGS) -pthread $^
 
 $(OBJS) serial.o parallel.o: %.o: %.cpp config.h
 	$(CC) -o $@ -c $(CFLAGS) $<
