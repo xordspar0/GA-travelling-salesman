@@ -1,11 +1,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
-#include <stdio.h>
+
+#include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <thread>
 #include <vector>
-#include <algorithm>
 
 #include "Initialization.h"
 #include "Route.h"
@@ -20,40 +21,6 @@ int generated;
 pthread_mutex_t routevectormutex;
 pthread_mutex_t generatedmutex;
 
-struct arg_struct
-{
-	vector< vector<double> > aWE;
-	int e;
-	int n;
-	vector<Route> fV;
-	vector<double> nC;
-}
-
-void threadFunc(void *arguments)
-{
-	struct arg_struct *args = arguments;
-	pthread_mutex_lock(&generatedmutex);
-	generated++;
-	pthread_mutex_unlock(&generatedmutex);
-	
-	Route temp;
-	
-	if(rand()%MUTATION_FRACTION == 1)
-	{
-		temp =
-			(mutate(args -> aWE, args -> e, args -> n, args -> fV[fmod(rand(), args -> fV.size())], args -> nC));
-	}
-	else
-	{
-		temp = 
-			(crossover(args -> aWE, args -> e, args -> n,
-			args -> fV[fmod(rand(), args -> fV.size())], args -> fV[fmod(rand(), args -> fV.size())], args -> nC));
-	}
-	
-	pthread_mutex_lock(&routevectormutex);
-	routeVector.push_back(temp);
-	pthread_mutex_unlock(&routevectormutex);
-}
 
 
 Route generate(vector< vector<double> > aWE, int e, int n, vector<double> nC) {
@@ -332,17 +299,39 @@ double fitnessStddev(vector<Route> routes) {
 	return sqrt(variance);
 }
 
+void threadFunc(vector< vector<double> > aWE, int e, int n, vector<Route> fV, vector<double> nC)
+{
+	while (generated < GEN_SIZE) {
+		pthread_mutex_lock(&generatedmutex);
+		generated++;
+		pthread_mutex_unlock(&generatedmutex);
+
+		Route temp;
+
+		if(rand()%MUTATION_FRACTION == 1)
+		{
+			temp = mutate(aWE, e, n, fV[fmod(rand(), fV.size())], nC);
+		}
+		else
+		{
+			temp = crossover(aWE, e, n,
+				fV[fmod(rand(), fV.size())], fV[fmod(rand(), fV.size())], nC);
+		}
+
+		pthread_mutex_lock(&routevectormutex);
+		routeVector.push_back(temp);
+		pthread_mutex_unlock(&routevectormutex);
+	}
+}
+
 int main()
 {
 	//generate random seed
 	srand(time(0));
-	
-	//pthread_mutex_t routevectormutex;
-	//pthread_mutex_t generatedmutex;
 
 	pthread_mutex_init(&routevectormutex, NULL);
 	pthread_mutex_init(&generatedmutex, NULL);
-	
+
 	//constant for # of edges in file (676 in small)(9824 in large)
 	const int EDGES = 676;
 	//constant for # of nodes in file (269 in small)(3917 in large)
@@ -396,26 +385,21 @@ int main()
 	double mean;
 	double stdev;
 
-	pthread_t workerThreads[NUMTHREADS];
-	
-	arg_struct args;
-	
+	thread workerThreads[NUMTHREADS];
+
 	for(int i = 0; i<GEN_NO; i++)
 	{
 		routeVector.clear();
-		args.aWE = allWeightedEdges;
-		args.e = EDGES;
-		args.n = NODES;
-		args.fV = fitVector;
-		args.nC = nCount;
-		for(int j = 0; j < GEN_SIZE; j++)
+		generated = 0;
+		for(int j = 0; j < NUMTHREADS; j++)
 		{
-			pthread_create(&workerThreads[i], NULL, &threadFunc, (void *)&args);
+			workerThreads[j] = thread(threadFunc,
+				allWeightedEdges,  EDGES,  NODES,  fitVector,  nCount);
 		}
 
-		for(int j = 0; j < GEN_SIZE; j++)
+		for(int j = 0; j < NUMTHREADS; j++)
 		{
-			pthread_join(workerThreads[i], NULL);
+			workerThreads[j].join();
 		}
 		cout << "Generation #" << i << endl;
 		cout << "Mean: " << fitnessMean(routeVector) << endl;
