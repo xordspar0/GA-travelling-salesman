@@ -129,19 +129,26 @@ Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vec
 		is incremented by one
 		*/
 		//consider replacing with std::find
-		for(int i = 0; i<=noVisited; i++)
-		{
-			if(citiesVisited[i] == currentCity)
-			{
+		
+		//for(int i = 0; i<noVisited; i++)
+		//{
+			// if(citiesVisited[i] == currentCity)
+			// {
 				//cout<<"City already present"<<endl;
-				break;
-			}
-			else if(i == noVisited)
+				// break;
+			// }
+			// else if(i == noVisited - 1)
+			// {
+				// citiesVisited.push_back(currentCity);
+				//noVisited++;
+			// }
+			
+			it = find(citiesVisited.begin(), citiesVisited.end(), currentCity);
+			if(it == citiesVisited.end())
 			{
 				citiesVisited.push_back(currentCity);
-				//noVisited++;
 			}
-		}
+		//}
 
 		//cout<<"City: "<<currentCity<<" Cities Visited: "<<noVisited<<endl;
 	}
