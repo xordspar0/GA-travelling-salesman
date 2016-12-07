@@ -12,12 +12,12 @@ using namespace std;
 /*
 Function to generate a new route or finish a preexisting route
 	aWE is the vector containing all of the edges and weights from the file
-	e is the number of edges
-	n is the number of nodes (currently unused)
+	edges is the number of edges
+	nodes is the number of nodes
 	pR is the partially completed route. Enter an empty Route object if generating a new route
 	cV is the cities visited by the partially completed route, enter an empty vector if generating new route
 */
-Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<double> nC) {
+Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vector<double> nC) {
 	double currentCity, totalWeight;
 
 	int currentEdge, ccIndex, noVisited, currentCityEdges;
@@ -40,7 +40,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	//initial edge randomly selected here..
 	if(nList.size() == 0)
 	{
-		currentEdge = rand()%676;
+		currentEdge = rand() % edges;
 		//first two cities added to citiesVisited and nList vectors
 		citiesVisited.push_back(aWE[currentEdge][0]);
 		citiesVisited.push_back(aWE[currentEdge][1]);
@@ -53,10 +53,10 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	{
 		for(int i = 0; i < nList.size() - 1; i++)
 		{
-			
+
 			for(int j = 0; j<aWE.size(); j++)
 			{
-				
+
 				if(aWE[j][0] == nList[i] && aWE[j][1] == nList[i+1])
 				{
 					currentEdge = j;
@@ -82,7 +82,7 @@ Route generate(vector< vector<double> > aWE, int e, int n, Route pR, vector<doub
 	currentCity = aWE[currentEdge][1];
 
 
-	while(noVisited < n)
+	while(noVisited < nodes)
 	{
 		//if statement imposes a hard weight cap on loop
 		if(totalWeight >= FITNESS_CAP)

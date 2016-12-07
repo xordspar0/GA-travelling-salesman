@@ -1,4 +1,5 @@
 #include <cmath>
+#include <sys/stat.h>
 
 #include <algorithm>
 #include <fstream>
@@ -15,19 +16,23 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv[])
 {
 	//generate random seed
 	srand(time(0));
 
-	//constant for # of edges in file (676 in small)(9824 in large)
-	const int EDGES = 676;
-	//constant for # of nodes in file (269 in small)(3917 in large)
-	const int NODES = 269;
-
 	//open file
 	fstream inputFile;
-	inputFile.open ("data/network-small.txt", std::ios::in);
+	struct stat buf;
+	if (argc != 2) {
+		cout << "Usage: " << argv[0] << " network_filename" << endl;
+		return 1;
+	} else if (stat(argv[1], &buf) == -1) {
+		cout << "File not found: " << argv[1];
+		return 2;
+	} else {
+		inputFile.open(argv[1], std::ios::in);
+	}
 
 	/*
 	variables u, v, and w used for file input
@@ -42,8 +47,10 @@ int main()
 	vector<double>::iterator it;
 
 	//loop transfers file data to vector
+	int EDGES = 0;
 	while(inputFile >> u >> v >> w)
 	{
+		EDGES++;
 		allWeightedEdges.push_back( {u,v,w} );
 		totalWeight += w;
 
@@ -59,9 +66,10 @@ int main()
 		}
 	}
 
+	int NODES = nCount.size();
+	cout << "Total number of nodes: " << NODES << endl;
+	cout << "Total number of edges: " << EDGES << endl;
 	cout << "Total weight of edges: " << totalWeight << endl;
-
-	cout << "Total nodes: " << nCount.size() << endl;
 
 	//route object generated here
 	//Route r1 = generate(allWeightedEdges, EDGES, NODES, nCount);

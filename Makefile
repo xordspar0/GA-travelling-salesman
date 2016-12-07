@@ -15,10 +15,10 @@ $(OBJS) serial.o parallel.o: %.o: %.cpp config.h
 	$(CC) -o $@ -c $(CFLAGS) $<
 
 test-serial: ga-serial
-	time ./ga-serial
+	time ./ga-serial data/network-small.txt
 
 test-parallel: ga-parallel
-	time ./ga-parallel
+	time ./ga-parallel data/network-small.txt
 
 clean:
 	rm -f *.o src/*~ net.txt ga-serial ga-parallel
