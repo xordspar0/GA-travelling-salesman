@@ -18,6 +18,7 @@ Function to generate a new route or finish a preexisting route
 	cV is the cities visited by the partially completed route, enter an empty vector if generating new route
 */
 Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vector<double> nC) {
+	
 	double currentCity, totalWeight;
 
 	int currentEdge, ccIndex, noVisited, currentCityEdges;
@@ -54,7 +55,7 @@ Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vec
 		for(int i = 0; i < nList.size() - 1; i++)
 		{
 
-			for(int j = 0; j<aWE.size(); j++)
+			for(int j = 0; j < aWE.size(); j++)
 			{
 
 				if(aWE[j][0] == nList[i] && aWE[j][1] == nList[i+1])
@@ -65,7 +66,7 @@ Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vec
 			}
 		}
 
-		for(int i = 0; i<nList.size(); i++)
+		for(int i = 0; i < nList.size(); i++)
 		{
 			it = find(citiesVisited.begin(), citiesVisited.end(), nList[i]);
 			if(it == citiesVisited.end())
@@ -95,7 +96,7 @@ Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vec
 		bool indexFound = false;
 
 		//get edges for current city here
-		for(int i = 0; i<aWE.size(); i++)
+		for(int i = 0; i < aWE.size(); i++)
 		{
 			if(aWE[i][0] == currentCity)
 			{
@@ -128,27 +129,12 @@ Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vec
 		vector. If it isn't, it's added to the vector and noVisited
 		is incremented by one
 		*/
-		//consider replacing with std::find
 		
-		//for(int i = 0; i<noVisited; i++)
-		//{
-			// if(citiesVisited[i] == currentCity)
-			// {
-				//cout<<"City already present"<<endl;
-				// break;
-			// }
-			// else if(i == noVisited - 1)
-			// {
-				// citiesVisited.push_back(currentCity);
-				//noVisited++;
-			// }
-			
 			it = find(citiesVisited.begin(), citiesVisited.end(), currentCity);
 			if(it == citiesVisited.end())
 			{
 				citiesVisited.push_back(currentCity);
 			}
-		//}
 
 		//cout<<"City: "<<currentCity<<" Cities Visited: "<<noVisited<<endl;
 	}
@@ -158,11 +144,10 @@ Route generate(vector< vector<double> > aWE, int edges, int nodes, Route pR, vec
 	vector<double> diff;
 	set_symmetric_difference(citiesVisited.begin(), citiesVisited.end(), nC.begin(), nC.end(), back_inserter(diff));
 
-	for(int i = 0; i<diff.size(); i++)
+	for(int i = 0; i < diff.size(); i++)
 	{
 		cout<< "Missing: " << diff[i] << endl;
 	}
-
 
 	//nodeList and total weight of route are added to the Route object
 	outputRoute.nodeList.swap(nList);
