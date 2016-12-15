@@ -20,23 +20,40 @@ Algorithm
 
 4.	Go back to step two and run until the optimal route is found.
 
-To Do
------
+Compiling
+---------
 
-* [x]	Implement a randomly generated system to give weights to routes.
-* [x]	Implement an algorithm to generete candidate routes.
-	*	Routes that are significantly worse than the average for the previous generation should be killed off before they finish.
-* [x]	Implement the genetic part of the algorithm: combine and mutate the best routes to make the next generation.
-* [x]	Parallelize route generation.
-* [x]	Parallelize combining and splicing.
-* [ ]	Improve the performance of the parallel implementation.
-	*	Instead of using a global counter to decide when to stop generating
-		routes, maybe allocate a certain number of routes to each thread at the
-		beginning.
-	*	Try having each thread keep a local route vector and combining them all
-		once at the end.
-* [ ]   Write a 5 to 10 page paper describing the project.
-	*	Part One: Describe Genetic Algorithims.
-	*	Part Two: Describe the Traveling Salesman problem.
-	*	Part Three: Describe project results.
+1.	To download the dataset, run:
+	
+	```
+	./downloadDataset.sh
+	```
 
+2.	Next, prepare a subset of the full dataset:
+
+	```
+	Rscript subgraph.r
+	```
+	
+3.	Finally, to compile the genetic algorithm, simply run:
+
+	```
+	make
+	```
+
+Running
+-------
+
+To run the serial version of the algorithm, use
+
+```
+./ga-serial dataset_filename
+```
+
+To run the parallel version, use
+
+```
+./ga-parallel dataset_filename
+```
+
+The number of threads to use for the parallel version can be changed by modifying the `NUMTHREADS` variable in `src/config.h`. After modifying this variable, recompile by typing `make`.
